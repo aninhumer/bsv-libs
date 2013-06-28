@@ -10,7 +10,6 @@ Stmts by replacing common patterns.
 
 import GetPut::*;
 import Vector::*;
-import Monad::*;
 import StmtFSM::*;
 
 import Pipes::*;
