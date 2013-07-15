@@ -8,6 +8,7 @@ export Assoc, singleton;
 export contains, lookup;
 export insertWith, insert;
 export mergeWith, merge;
+export update, adjust;
 
 
 //TODO: Find better home for this.
@@ -81,6 +82,29 @@ function Assoc#(keyT,valueT) merge(
     Assoc#(keyT,valueT) as1, Assoc#(keyT,valueT) as2)
 provisos (Eq#(keyT)) =
     mergeWith(leftBias,as1,as2);
+
+
+function Assoc#(keyT,valueT) update(
+    function Maybe#(valueT) f(valueT x1),
+    keyT k, Assoc#(keyT,valueT) as)
+provisos (Eq#(keyT)) =
+    case (as) matches
+        tagged Nil : return Nil;
+        tagged Cons { _1: {.x,.y}, _2: .xs } :
+            if (x == k) begin
+                return cons(tuple2(k,fromMaybe(y,f(y))),xs);
+            end else begin
+                return cons(tuple2(x,y),update(f,k,xs));
+            end
+    endcase;
+
+function Assoc#(keyT,valueT) adjust(
+    function valueT f(valueT x1),
+    keyT k, Assoc#(keyT,valueT) as)
+provisos (Eq#(keyT));
+    function maybeF(x) = tagged Valid f(x);
+    return update(maybeF,k,as);
+endfunction
 
 
 endpackage
