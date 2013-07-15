@@ -1,2 +1,8 @@
 *.bo
 *.ba
+*.v
+*.o
+*.h
+*.cxx
+a.out*
+.nfs*
