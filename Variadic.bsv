@@ -45,7 +45,30 @@ provisos(VectorBuilder#(TAdd#(n,1),a,bldr));
 endinstance
 
 function bldr vector provisos(VectorBuilder#(0,a,bldr)) =
-    vecBuild(nil);
+    vecBuild(Vector::nil);
+
+
+import ListN::*;
+
+export listN;
+
+
+typeclass ListNBuilder#(type n, type a, type bldr)
+dependencies(bldr determines (n,a));
+    function bldr listNBuild(ListN#(n,a) x);
+endtypeclass
+
+instance ListNBuilder#(n,a,ListN#(n,a));
+    function listNBuild = ListN::reverse;
+endinstance
+
+instance ListNBuilder#(n,a,function bldr f(a x))
+provisos(ListNBuilder#(TAdd#(n,1),a,bldr));
+    function listNBuild(xs,x) = listNBuild(ListN::cons(x,xs));
+endinstance
+
+function bldr listN provisos(ListNBuilder#(0,a,bldr)) =
+    listNBuild(ListN::nil);
 
 
 endpackage
