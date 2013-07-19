@@ -71,4 +71,43 @@ function bldr listN provisos(ListNBuilder#(0,a,bldr)) =
     listNBuild(ListN::nil);
 
 
+import HList::*;
+
+export hList;
+
+
+typeclass HReverse#(type as, type bs)
+dependencies(as determines bs);
+    function bs hReverse(as x);
+endtypeclass
+
+instance HReverse#(HNil,HNil);
+    function hReverse = id;
+endinstance
+
+instance HReverse#(HCons#(a,as),cs)
+provisos(HReverse#(as,bs),HAppend#(bs,HList1#(a),cs));
+    function hReverse(xs) = hAppend(hReverse(xs.tl),hList1(xs.hd));
+endinstance
+
+
+typeclass HListBuilder#(type current, type bldr)
+dependencies(bldr determines current);
+    function bldr hListBuild(current x);
+endtypeclass
+
+instance HListBuilder#(as, bs)
+provisos(HReverse#(as,bs));
+    function hListBuild = hReverse;
+endinstance
+
+instance HListBuilder#(as, function bldr f(a x))
+provisos(HListBuilder#(bs,bldr),HAppend#(as,HList1#(a),bs));
+    function hListBuild(xs,x) = hListBuild(hCons(x,xs));
+endinstance
+
+function bldr hList provisos(HListBuilder#(HNil,bldr)) =
+    hListBuild(HNil{});
+
+
 endpackage
