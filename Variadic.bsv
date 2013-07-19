@@ -1,3 +1,28 @@
+/*****************************************************************************
+
+Variadic
+========
+
+This library provides convenient construction functions which can accept a
+variable number of arguments and produce a sequence type containing the
+corresponding values. Currently the supported sequence types are List, Vector,
+ListN and HList, each of which has a correspondingly named constructor
+function, with the first character in lowercase.
+
+For example, if we wish to construct a Vector of Integers containing the
+values one to four, we can do so with the "vector" function:
+
+    Vector#(4,Integer) oneToFour = vector(1,2,3,4);
+
+If you receive an error message referring to a typeclass with a name ending
+in Builder, for example Variadic::VectorBuilder this most likely means you
+have made a type error in your use of one the corresponding function.
+
+The typeclass mechanism used to allow these functions is based on one used
+in Haskell, explained here:
+http://stackoverflow.com/questions/7828072/how-does-haskell-printf-work
+
+*****************************************************************************/
 
 package Variadic;
 
