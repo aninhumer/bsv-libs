@@ -127,7 +127,7 @@ provisos(HReverse#(as,bs));
 endinstance
 
 instance HListBuilder#(as, function bldr f(a x))
-provisos(HListBuilder#(bs,bldr),HAppend#(as,HList1#(a),bs));
+provisos(HListBuilder#(HCons#(a,as),bldr));
     function hListBuild(xs,x) = hListBuild(hCons(x,xs));
 endinstance
 
